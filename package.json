@@ -1,0 +1,19 @@
+{
+  "name": "ilrinodeapp",
+  "version": "1.0.0",
+  "description": "application for week 10 assignment",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rye-Guy/ilriNodeApp.git"
+  },
+  "author": "Ryan Racioppo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Rye-Guy/ilriNodeApp/issues"
+  },
+  "homepage": "https://github.com/Rye-Guy/ilriNodeApp#readme"
+}
