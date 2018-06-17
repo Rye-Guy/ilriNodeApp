@@ -1,4 +1,4 @@
-console.log("This has ran!!!");
+console.log("keys imported!");
 
 exports.twitterKeys = {
     consumer_key: process.env.TWITTER_CONSUMER_KEY,
