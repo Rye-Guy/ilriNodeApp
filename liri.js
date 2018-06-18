@@ -65,9 +65,11 @@ function getSong(song) {
         var artistNames = [];
 
         for (var i = 0; i < artistArray.length; i++) {
-            artistNames.push(artistArray[i].name);
+
+            console.log("Artist: " + data.tracks.items[0].artists[0].name);
             console.log("Album: " + data.tracks.items[0].album.name);
             console.log("Song Title: " + data.tracks.items[0].name);
+            console.log("Link: " + data.tracks.items[0].external_urls.spotify);
             //  console.log(artistArray);
             //  console.log(artistNames);
         }
