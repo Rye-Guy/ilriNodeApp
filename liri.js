@@ -3,6 +3,8 @@ var Twitter = require('twitter');
 var twitterKeys = require('./keys.js');
 var request = require('request');
 var Spotify = require('node-spotify-api');
+var spotify = new Spotify(twitterKeys.spotifyKeys);
+
 
 var action = process.argv[2];
 
@@ -19,8 +21,14 @@ function takeAction(action, arg) {
             break;
 
         case "spotify-this-song":
+
             var song = arg;
             getSong(song);
+            break;
+
+        case "movie-this":
+            var movieTitle = arg;
+            getMovie(movieTitle);
             break;
     }
 
@@ -33,7 +41,6 @@ function getMyTweets() {
         q: '@pattyMo',
         count: 20
     };
-
     client.get('search/tweets', params, function (error, tweets, response) {
         if (!error) {
             for (var i = 0; i < tweets.statuses.length; i++) {
@@ -49,7 +56,10 @@ function getMyTweets() {
 }
 
 function getSong(song) {
-    var spotify = new Spotify(twitterKeys.spotifyKeys);
+
+    if (arg == null || arg == '') {
+        song = 'The Sign Ace of Base';
+    }
 
     spotify.search({
         type: 'track',
@@ -60,95 +70,86 @@ function getSong(song) {
             console.log("Cannot Find Song!");
             return;
         }
-      //  console.log(JSON.stringify(data.tracks.items[0]));
-        var artistArray = data.tracks.items[0].album.artists;
-        var artistNames = [];
-
-        for (var i = 0; i < artistArray.length; i++) {
-
-            console.log("Artist: " + data.tracks.items[0].artists[0].name);
-            console.log("Album: " + data.tracks.items[0].album.name);
-            console.log("Song Title: " + data.tracks.items[0].name);
-            console.log("Link: " + data.tracks.items[0].external_urls.spotify);
-            //  console.log(artistArray);
-            //  console.log(artistNames);
-        }
-
-        // var artists = artistsNames.join(", ");
-
-        // console.log("Artists: " + artists);
-        // console.log("Song: " + data.tracks.items[0].name);
-        // console.log("Link: " + data.tracks.item[0].preview_url);
-        // console.log("Album: " + data.tracks.item[0].album.name);
+        console.log("Artist: " + data.tracks.items[0].artists[0].name);
+        console.log("Album: " + data.tracks.items[0].album.name);
+        console.log("Song Title: " + data.tracks.items[0].name);
+        console.log("Link: " + data.tracks.items[0].external_urls.spotify);
     });
+
+
 }
 
+function getMovie(movieTitle) {
+    if (arg == null || arg == '') {
+        movieTitle = 'Mr. Nobody';
+    }
+    console.log("hello");
+    var query = "http://www.omdbapi.com/?t=" + movieTitle + "&plot=short&tomatoes=true&apikey=trilogy";
+    console.log(query);
+    request(query, function (error, response, data) {
+
+        if (!error) {
+            var movieData = JSON.parse(data);
+            console.log("Title: " + movieData.Title);
+            console.log("Year: " + movieData.Year);
+            console.log("IMDB Rating: " + movieData.Ratings[0].Value);
+            console.log("Rotten Tomatos Rating: " + movieData.Ratings[1].Value);
+            console.log("Country Produced: " + movieData.Country);
+            console.log("Language: " + movieData.Language);
+            console.log("Actors: " + movieData.Actors);
+            console.log("Plot: " + movieData.Plot);
+
+            
+        } else
+            console.log("OMDB request has failed!");
+    });
+
+}
 
 // {
-//     "album": {
-//         "album_type": "album",
-//         "artists": [{
-//             "external_urls": {
-//                 "spotify": "https://open.spotify.com/artist/1Mxqyy3pSjf8kZZL4QVxS0"
-//             },
-//             "href": "https://api.spotify.com/v1/artists/1Mxqyy3pSjf8kZZL4QVxS0",
-//             "id": "1Mxqyy3pSjf8kZZL4QVxS0",
-//             "name": "Frank Sinatra",
-//             "type": "artist",
-//             "uri": "spotify:artist:1Mxqyy3pSjf8kZZL4QVxS0"
-//         }],
-//         "available_markets": ["AD", "AR", "AT", "AU", "BE", "BG", "BO", "BR", "CA", "CH", "CL", "CO", "CR", "CY", "CZ", "DE", "DK", "DO", "EC", "EE", "ES", "FI", "FR", "GB", "GR", "GT", "HK", "HN", "HU", "ID", "IE", "IL", "IS", "IT", "JP", "LI", "LT", "LU", "LV", "MC", "MT", "MX", "MY", "NI", "NL", "NO", "NZ", "PA", "PE", "PH", "PL", "PT", "PY", "RO", "SE", "SG", "SK", "SV", "TH", "TR", "TW", "US", "UY", "VN", "ZA"],
-//         "external_urls": {
-//             "spotify": "https://open.spotify.com/album/66v9QmjAj0Wwhh2OpbU4BE"
-//         },
-//         "href": "https://api.spotify.com/v1/albums/66v9QmjAj0Wwhh2OpbU4BE",
-//         "id": "66v9QmjAj0Wwhh2OpbU4BE",
-//         "images": [{
-//             "height": 640,
-//             "url": "https://i.scdn.co/image/a4be7d6da89ee5e7fbac9875d590fc16f7822faa",
-//             "width": 638
-//         }, {
-//             "height": 300,
-//             "url": "https://i.scdn.co/image/d1a0562da0926d7344a9e57edcba641510d8ed17",
-//             "width": 299
-//         }, {
-//             "height": 64,clear
-//             "url": "https://i.scdn.co/image/9e3bb89d8bc58a17bc49515e872ef31535d7cb03",
-//             "width": 64
-//         }],
-//         "name": "Come Fly With Me",
-//         "release_date": "1958",
-//         "release_date_precision": "year",
-//         "type": "album",
-//         "uri": "spotify:album:66v9QmjAj0Wwhh2OpbU4BE"
-//     },
-//     "artists": [{
-//         "external_urls": {
-//             "spotify": "https://open.spotify.com/artist/1Mxqyy3pSjf8kZZL4QVxS0"
-//         },
-//         "href": "https://api.spotify.com/v1/artists/1Mxqyy3pSjf8kZZL4QVxS0",
-//         "id": "1Mxqyy3pSjf8kZZL4QVxS0",
-//         "name": "Frank Sinatra",
-//         "type": "artist",
-//         "uri": "spotify:artist:1Mxqyy3pSjf8kZZL4QVxS0"
+//     "Title": "Star Wars: Episode IV - A New Hope",
+//     "Year": "1977",
+//     "Rated": "PG",
+//     "Released": "25 May 1977",
+//     "Runtime": "121 min",
+//     "Genre": "Action, Adventure, Fantasy",
+//     "Director": "George Lucas",
+//     "Writer": "George Lucas",
+//     "Actors": "Mark Hamill, Harrison Ford, Carrie Fisher, Peter Cushing",
+//     "Plot": "Luke Skywalker joins forces with a Jedi Knight, a cocky pilot, a Wookiee and two droids to save the galaxy from the Empire's world-destroying battle-station, while also attempting to rescue Princess Leia from the evil Darth Vader.",
+//     "Language": "English",
+//     "Country": "USA",
+//     "Awards": "Won 6 Oscars. Another 50 wins & 28 nominations.",
+//     "Poster": "https://m.media-amazon.com/images/M/MV5BNzVlY2MwMjktM2E4OS00Y2Y3LWE3ZjctYzhkZGM3YzA1ZWM2XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SX300.jpg",
+//     "Ratings": [{
+//         "Source": "Internet Movie Database",
+//         "Value": "8.6/10"
+//     }, {
+//         "Source": "Rotten Tomatoes",
+//         "Value": "93%"
+//     }, {
+//         "Source": "Metacritic",
+//         "Value": "90/100"
 //     }],
-//     "available_markets": ["AD", "AR", "AT", "AU", "BE", "BG", "BO", "BR", "CA", "CH", "CL", "CO", "CR", "CY", "CZ", "DE", "DK", "DO", "EC", "EE", "ES", "FI", "FR", "GB", "GR", "GT", "HK", "HN", "HU", "ID", "IE", "IL", "IS", "IT", "JP", "LI", "LT", "LU", "LV", "MC", "MT", "MX", "MY", "NI", "NL", "NO", "NZ", "PA", "PE", "PH", "PL", "PT", "PY", "RO", "SE", "SG", "SK", "SV", "TH", "TR", "TW", "US", "UY", "VN", "ZA"],
-//     "disc_number": 1,
-//     "duration_ms": 198066,
-//     "explicit": false,
-//     "external_ids": {
-//         "isrc": "USCA29800360"
-//     },
-//     "external_urls": {
-//         "spotify": "https://open.spotify.com/track/4hHbeIIKO5Y5uLyIEbY9Gn"
-//     },
-//     "href": "https://api.spotify.com/v1/tracks/4hHbeIIKO5Y5uLyIEbY9Gn",
-//     "id": "4hHbeIIKO5Y5uLyIEbY9Gn",
-//     "is_local": false,
-//     "name": "Come Fly With Me - 1998 Digital Remaster",
-//     "popularity": 68,
-//     "preview_url": null,
-//     "track_number": 1,
-//     "type": "track",
-//     "uri": "spotify:track:4hHbeIIKO5Y5uLyIEbY9Gn"
+//     "Metascore": "90",
+//     "imdbRating": "8.6",
+//     "imdbVotes": "1,057,823",
+//     "imdbID": "tt0076759",
+//     "Type": "movie",
+//     "tomatoMeter": "N/A",
+//     "tomatoImage": "N/A",
+//     "tomatoRating": "N/A",
+//     "tomatoReviews": "N/A",
+//     "tomatoFresh": "N/A",
+//     "tomatoRotten": "N/A",
+//     "tomatoConsensus": "N/A",
+//     "tomatoUserMeter": "N/A",
+//     "tomatoUserRating": "N/A",
+//     "tomatoUserReviews": "N/A",
+//     "tomatoURL": "http://www.rottentomatoes.com/m/star_wars/",
+//     "DVD": "21 Sep 2004",
+//     "BoxOffice": "N/A",
+//     "Production": "20th Century Fox",
+//     "Website": "http://www.starwars.com/episode-iv/",
+//     "Response": "True"
 // }
