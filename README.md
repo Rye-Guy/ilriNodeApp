@@ -9,8 +9,11 @@
 <h2>Main Commands</h2>
 <ul>
 <li>my-tweets</li>
+  <p>Prints your last 20 tweets to the console</p>
 <li>spotify-this-song</li>
+  <p>Searches for</p>
 <li>movie-this</li>
+  <p>Searches for</p>
 <li>do-what-it-says</li>
 </ul>
 
