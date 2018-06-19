@@ -11,9 +11,9 @@
 <li>my-tweets</li>
   <p>Prints your last 20 tweets to the console</p>
 <li>spotify-this-song</li>
-  <p>Searches for</p>
+  <p>Searches for specified song on spotify</p>
 <li>movie-this</li>
-  <p>Searches for</p>
+  <p>Searches for movie</p>
 <li>do-what-it-says</li>
 </ul>
 
